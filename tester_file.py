@@ -12,3 +12,7 @@ engine = dbc.init_db_engine(cred_dict)
 from data_extraction import DataExtractor as de
 tables_list = de.list_db_tables(engine)
 print(tables_list)
+
+users_data = de.read_RDS_table(tables_list[2], engine)
+
+print(users_data)

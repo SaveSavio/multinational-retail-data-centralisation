@@ -13,3 +13,12 @@ class DataExtractor:
         inspector = inspect(engine)
         table_names = inspector.get_table_names()
         return table_names
+    
+    
+    def read_RDS_table(table_name, engine):
+        """
+        Extracts the database into a Pandas dataframe
+        """
+        import pandas as pd
+        df = pd.read_sql_table(table_name, engine)
+        return df
