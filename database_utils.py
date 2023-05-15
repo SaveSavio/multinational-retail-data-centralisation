@@ -1,15 +1,20 @@
 class DatabaseConnector:
     """
-    Defines the tools to connect and upload data into the database
-    Ref: Project Milestone2, Task2
-    Attributes:
-        ...
-        ...
+    Utility class.
+    Defines the tools to connect, extract and upload data into the database.
+    The methods contained will be fit to extract data from a particular data source.
+    These sources include CSV files, an API and an S3 bucket.
     """
     
     def read_db_creds(creds_yaml):
         """
         Reads credentials from the yaml file and returns a dictionary of credentials
+            
+            Parameters: 
+                yaml file containing the credential to connect to the database
+
+            Returns:
+                the credential in dictionary format
         """
         
         import yaml
@@ -21,7 +26,13 @@ class DatabaseConnector:
         
     def init_db_engine(credentials):
         """
-        Reads the credentials from the return of read_db_creds and initialises and returns an sqlalchemy database engine.
+        Initializes and returns a SQLalchemy engine
+
+            Parameters:
+                the credentials from the return of read_db_creds in form of a python dictionary
+            
+            Returns:    
+                Initialises and returns an sqlalchemy database engine.
         """
 
         from sqlalchemy import create_engine

@@ -7,7 +7,13 @@ class DataExtractor:
 
     def list_db_tables(engine):
         """
-        lists all the tables in the database
+        Lists all the tables names in the database
+
+            Parameters:
+                SQLalchemy engine object
+
+            Returns:
+                A list all the tables in the database
         """
         from sqlalchemy import inspect
         inspector = inspect(engine)
@@ -18,6 +24,13 @@ class DataExtractor:
     def read_RDS_table(table_name, engine):
         """
         Extracts the database into a Pandas dataframe
+
+            Paramaters:
+                table_name: a string containing the name of the table to be converted in a pandas dataframe
+                engine: the SQLalchemy engine object
+
+            Returns:
+                a Pandas dataframe containing the information of the input table
         """
         import pandas as pd
         df = pd.read_sql_table(table_name, engine)
