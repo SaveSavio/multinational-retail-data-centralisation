@@ -11,5 +11,5 @@ class DataExtractor:
         """
         from sqlalchemy import inspect
         inspector = inspect(engine)
-        inspector.get_table_names()
-        engine.execute('''SELECT * FROM actor''').fetchall()
+        table_names = inspector.get_table_names()
+        return table_names
