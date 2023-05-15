@@ -13,6 +13,7 @@ class DatabaseConnector:
         """
         Reads credentials from the yaml file and returns a dictionary of credentials
         """
+        
         import yaml
 
         with open(creds_yaml, 'r') as yaml_file:
@@ -24,7 +25,6 @@ class DatabaseConnector:
         """
         Reads the credentials from the return of read_db_creds and initialises and returns an sqlalchemy database engine.
         """
-        #credentials = DatabaseConnector.read_db_creds(creds_yaml)
 
         from sqlalchemy import create_engine
         DATABASE_TYPE = 'postgresql'
@@ -34,5 +34,11 @@ class DatabaseConnector:
         PASSWORD = credentials['RDS_PASSWORD']
         DATABASE = credentials['RDS_DATABASE']
         PORT = credentials['RDS_PORT']
+        # create SQLalchemy engine
         engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}") 
-        engine.connect()
+        # checks connectivity
+        try:
+            engine.connect()
+            print("SQL engine successfully initialized")
+        except:
+            print("Error initializing SQLalchemy engine")
