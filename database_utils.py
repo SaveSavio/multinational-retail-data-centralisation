@@ -26,7 +26,7 @@ class DatabaseConnector:
         
     def init_db_engine(credentials):
         """
-        Initializes and returns a SQLalchemy engine
+        Initializes and returns a SQLalchemy engine object
 
             Parameters:
                 the credentials from the return of read_db_creds in form of a python dictionary
@@ -36,6 +36,7 @@ class DatabaseConnector:
         """
 
         from sqlalchemy import create_engine
+        
         DATABASE_TYPE = 'postgresql'
         DBAPI = 'psycopg2'
         HOST = credentials['RDS_HOST']
@@ -53,3 +54,8 @@ class DatabaseConnector:
         except:
             print("Error initializing SQLalchemy engine")
         
+    def upload_to_db(dataframe, table_name):
+        """
+         This method will take in a Pandas DataFrame and table name to upload to as an argument.
+        """
+        pass
