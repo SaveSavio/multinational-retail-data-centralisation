@@ -5,12 +5,11 @@ class DataExtractor:
     an S3 bucket.
     """
 
-    def list_db_tables():
+    def list_db_tables(engine):
         """
         lists all the tables in the database
         """
-        try:
-            engine in globals()
-        except NameError:
-            print("SQLAlchemy engine not initialized.\n Please initialized it first")
-        
+        from sqlalchemy import inspect
+        inspector = inspect(engine)
+        inspector.get_table_names()
+        engine.execute('''SELECT * FROM actor''').fetchall()

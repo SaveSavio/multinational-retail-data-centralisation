@@ -7,4 +7,7 @@ cred_dict = dbc.read_db_creds(file_name)
 #print(type(cred_dict))
 
 # initialize engine
-dbc.init_db_engine(cred_dict)
+engine = dbc.init_db_engine(cred_dict)
+
+from data_extraction import DataExtractor as de
+de.list_db_tables(engine)
