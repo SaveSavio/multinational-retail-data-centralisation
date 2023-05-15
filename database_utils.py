@@ -7,8 +7,6 @@ class DatabaseConnector:
         ...
     """
     
-    # def __init__(self)
-
     def read_db_creds(creds_yaml):
         """
         Reads credentials from the yaml file and returns a dictionary of credentials
@@ -40,5 +38,7 @@ class DatabaseConnector:
         try:
             engine.connect()
             print("SQL engine successfully initialized")
+            return engine
         except:
             print("Error initializing SQLalchemy engine")
+        
