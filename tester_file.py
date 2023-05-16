@@ -1,3 +1,4 @@
+
 from database_utils import DatabaseConnector as dbc
 file_name = 'db_creds.yaml'
 
@@ -14,5 +15,7 @@ tables_list = de.list_db_tables(engine)
 print(tables_list)
 
 users_data = de.read_RDS_table(tables_list[2], engine)
-
 print(users_data)
+# now let's move these data to a Jupyter notebook to define the cleaning functions interactively
+
+users_data.to_csv('RDS_table.csv')
