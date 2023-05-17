@@ -36,7 +36,7 @@ class DatabaseConnector:
         """
 
         from sqlalchemy import create_engine
-        
+
         DATABASE_TYPE = 'postgresql'
         DBAPI = 'psycopg2'
         HOST = credentials['RDS_HOST']
@@ -54,8 +54,9 @@ class DatabaseConnector:
         except:
             print("Error initializing SQLalchemy engine")
         
-    def upload_to_db(dataframe, table_name):
+    def upload_to_db(dataframe, table_name, engine):
         """
          This method will take in a Pandas DataFrame and table name to upload to as an argument.
         """
-        pass
+        # need to understand where do we get engine from
+        dataframe.to_sql(table_name, engine, if_exists='replace')
