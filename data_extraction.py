@@ -25,7 +25,7 @@ class DataExtractor:
         """
         Extracts the database into a Pandas dataframe
 
-            Paramaters:
+            Parameters:
                 table_name: a string containing the name of the table to be converted in a pandas dataframe
                 engine: the SQLalchemy engine object 
 

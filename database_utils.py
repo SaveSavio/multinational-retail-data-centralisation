@@ -49,7 +49,7 @@ class DatabaseConnector:
         # checks connectivity
         try:
             engine.connect()
-            print("SQL engine successfully initialized")
+            print("SQL engine successfully connected")
             return engine
         except:
             print("Error initializing SQLalchemy engine")
@@ -59,4 +59,7 @@ class DatabaseConnector:
          This method will take in a Pandas DataFrame and table name to upload to as an argument.
         """
         # need to understand where do we get engine from
-        dataframe.to_sql(table_name, engine, if_exists='replace')
+        import pandas as pd
+        #conn = engine.connect()
+        df = dataframe.to_sql(table_name, engine, if_exists='replace')
+        return df   
