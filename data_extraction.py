@@ -35,3 +35,13 @@ class DataExtractor:
         import pandas as pd
         df = pd.read_sql_table(table_name, engine)
         return df
+    
+    def retrieve_pdf_data(https_link):
+        
+        import tabula
+        import pandas as pd
+        dfs = tabula.read_pdf(https_link, pages='all')
+        # the pdf file has 1 header for each page so tabula returns 1 list per each page
+        # it is therefore necessary to concatenate all the pages in one table
+        df = pd.concat(dfs)
+        return df

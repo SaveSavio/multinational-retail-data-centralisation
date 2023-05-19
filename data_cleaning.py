@@ -3,7 +3,7 @@ class DataCleaning:
     """
     Defines methods to clean data from all datasources
     """
-    def clean_user_data(dataframe):
+    def clean_user_data(df):
         
         """
         Performs the cleaning of the user data.
@@ -12,9 +12,10 @@ class DataCleaning:
         """
         import pandas as pd
         # drop the index columns, it is redundant
-        dataframe = dataframe.drop(['index'], axis = 1)
+        df = df.drop(['index'], axis = 1)
         # sort out some wrong country code entries for UK
-        dataframe.loc[(dataframe['country'] == "United Kingdom") & (dataframe['country_code'] != "GB"), 'country_code'] = 'GB'
+        df.loc[(df['country'] == "United Kingdom") & (df['country_code'] != "GB"), 'country_code'] = 'GB'
         # remove some wrong entries
         df = df[df['country'].isin(['United Kingdom', 'Germany', 'United States'])]
-        return dataframe
+        # returns the cleaned dataframe if required
+        return df
