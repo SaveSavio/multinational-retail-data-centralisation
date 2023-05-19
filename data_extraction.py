@@ -37,7 +37,15 @@ class DataExtractor:
         return df
     
     def retrieve_pdf_data(https_link):
-        
+        """
+            Uses the tabula-py Python package to extract data from a pdf document
+
+            Parameters:
+                Takes in a link as an argument
+            
+            Returns:
+                a pandas DataFrame containing the data in the pdf
+        """
         import tabula
         import pandas as pd
         dfs = tabula.read_pdf(https_link, pages='all')
