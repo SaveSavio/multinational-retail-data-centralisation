@@ -11,10 +11,10 @@ class DataCleaning:
         typed values and rows filled with the wrong information.
         """
         import pandas as pd
-        #dataframe.drop(['index', 'level_0', 'first_name', 'last_name', '1' ], axis = 1, inplace = True)
+        # drop the index columns, it is redundant
         dataframe = dataframe.drop(['index'], axis = 1)
+        # sort out some wrong country code entries for UK
         dataframe.loc[(dataframe['country'] == "United Kingdom") & (dataframe['country_code'] != "GB"), 'country_code'] = 'GB'
-        dataframe = dataframe[~dataframe['country'].isin(['I7G4DMDZOZ', 'AJ1ENKS3QL', 'XGI7FM0VBJ', 'S0E37H52ON', 'XN9NGL5C0B',
-       '50KUU3PQUF', 'EWE3U0DZIV', 'GMRBOMI0O1', 'YOTSVPRBQ7', '5EFAFD0JLI', 'PNRMPSYR1J', 'RQRB7RMTAD', '3518UD5CE8',
-       '7ZNO5EBALT', 'T4WBZSW0XI'])]
+        # remove some wrong entries
+        df = df[df['country'].isin(['United Kingdom', 'Germany', 'United States'])]
         return dataframe

@@ -54,14 +54,15 @@ class DatabaseConnector:
         except:
             print("Error initializing SQLalchemy engine")
         
-    def upload_to_db(dataframe, table_name, engine):
+    def upload_to_db(dataframe, table_name):
         """
          This method will take in a Pandas DataFrame and table name to upload to as an argument.
         """
         # I should test if inspect is necessary
         from sqlalchemy import create_engine, inspect
         import pandas as pd
-
+        # the engine is implemented statically to the sales_data database
+        # but we have the tools to make this more "dynamic" by passing the engine parameter
         DATABASE_TYPE = 'postgresql'
         DBAPI = 'psycopg2'
         HOST = 'localhost'
@@ -69,15 +70,9 @@ class DatabaseConnector:
         PASSWORD = 'macchio'
         DATABASE = 'sales_data'
         PORT = 5432
-        # create SQLalchemy engine
+        # create SQLalchemy engine for the sales_data database
         engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}") 
-        
+        # connect the engine
         engine.connect()
-        
+        # upload the database to the SQL database with the pandas method .to_sql
         dataframe.to_sql(table_name, engine, if_exists='replace')
-        
-        # from sklearn.datasets import load_iris
-        # data = load_iris()
-        # iris = pd.DataFrame(data['data'], columns=data['feature_names'])
-
-        # iris.to_sql('iris_dataset', engine, if_exists='replace')
