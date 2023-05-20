@@ -53,3 +53,10 @@ class DataExtractor:
         # it is therefore necessary to concatenate all the pages in one table
         df = pd.concat(dfs)
         return df
+    
+    def list_number_of_stores():
+        import requests
+        key = {'x-api-key': 'yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX'}
+        url = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/number_stores'
+        results = requests.get(url, headers = key)
+        return results
