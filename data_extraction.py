@@ -54,9 +54,42 @@ class DataExtractor:
         df = pd.concat(dfs)
         return df
     
-    def list_number_of_stores():
+    def list_number_of_stores(url, key):
+        
+        """
+        Retrieves the number of stores from the endpoint
+
+            Parameters:
+                url: endpoint url
+                key: dictionary key to connect to the API in the method's header
+
+            Returns:
+                the number of stores to be extracted later
+        """
         import requests
-        key = {'x-api-key': 'yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX'}
-        url = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/number_stores'
         results = requests.get(url, headers = key)
-        return results
+        return results.json()['number_stores']
+    
+    def retrieve_stores_data(base_url, number_stores, key):
+        """
+        Retrieve a store endpoint as an argument and extracts all the stores from the API saving them in a pandas DataFrame.
+            Parameters:
+                base_url: stores endpoint
+                the number of stores (an integer) that have to be extracted
+                an authentication key to be passed in the requests.get header
+            Returns:
+                A pandas dataframe containing all stores information
+        """
+       
+        import pandas as pd
+        import requests
+        
+        df = pd.DataFrame()
+
+        for index in range(number_stores):
+            url = base_url + str(index)
+            store = requests.get(url, headers = key)
+            tmp = pd.json_normalize(store.json())
+            df = pd.concat([df, tmp], ignore_index=True)
+            print(index+1)
+        return df
