@@ -28,17 +28,22 @@ users_data = de.read_RDS_table(tables_list[1], RDS_engine)
 from data_cleaning import DataCleaning as dc
 
 # the method clean_user_data cleans the data by means of pandas
-clean_user_data = dc.clean_user_data(users_data)
+user_data_clean = dc.clean_user_data(users_data)
 
 #now upload the user data to the server
-dbc.upload_to_db(clean_user_data, 'dim_users')
+dbc.upload_to_db(user_data_clean, 'dim_users')
 #print(df)
 
-print(clean_user_data)
+print(user_data_clean)
 
 # extract all data from the following like
 pdf_link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf'
+card_data = de.retrieve_pdf_data(pdf_link)
+# print the data as they were extracted
+print(card_data)
+# clean the data through the relative method
+card_data_clean = dc.clean_card_data(card_data)
+# print the clean data
+print(card_data_clean)
 
-pdf_data = de.retrieve_pdf_data(pdf_link)
-
-print(pdf_data)
+dbc.upload_to_db(card_data_clean, 'card_data_clean')

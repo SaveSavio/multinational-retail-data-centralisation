@@ -33,7 +33,7 @@ class DataCleaning:
         df['join_date'] = pd.to_datetime(df['join_date'], infer_datetime_format=True, errors = 'coerce')
         # this statement allows to get rid of the rows with incorrect dates
         df = df[df['join_date'].notna()]
-        
+
         # sort out some wrong country code entries for UK
         df.loc[(df['country'] == "United Kingdom") & (df['country_code'] != "GB"), 'country_code'] = 'GB'
         # remove some wrong entries
@@ -47,4 +47,12 @@ class DataCleaning:
         Performs the cleaning of the card data.
         Removes any erroneous values, NULL values or errors with formatting.
         """
-        pass
+        import pandas as pd
+        import datetime
+        df = df[df['card_number']!='NULL']
+        df = df[df['card_provider'].isin(['Diners Club / Carte Blanche', 'American Express', 'JCB 16 digit',
+       'JCB 15 digit', 'Maestro', 'Mastercard', 'Discover',
+       'VISA 19 digit', 'VISA 16 digit', 'VISA 13 digit'])]
+        df['date_payment_confirmed'] = pd.to_datetime(df['date_payment_confirmed'], infer_datetime_format=True, errors = 'coerce')
+        
+        return df
