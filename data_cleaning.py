@@ -42,10 +42,14 @@ class DataCleaning:
         return df
     
     def clean_card_data(df):
-        
         """
         Performs the cleaning of the card data.
         Removes any erroneous values, NULL values or errors with formatting.
+
+            Parameters: a pandas dataframe
+
+            Returns: a pandas dataframe
+
         """
         import pandas as pd
         import datetime
@@ -54,5 +58,29 @@ class DataCleaning:
        'JCB 15 digit', 'Maestro', 'Mastercard', 'Discover',
        'VISA 19 digit', 'VISA 16 digit', 'VISA 13 digit'])]
         df['date_payment_confirmed'] = pd.to_datetime(df['date_payment_confirmed'], infer_datetime_format=True, errors = 'coerce')
+        
+        return df
+    
+    def clean_store_data(df):
+        """
+        Performs the cleaning of the card data.
+        Removes any erroneous values, NULL values or errors with formatting.
+
+            Parameters: a pandas dataframe
+
+            Returns: a pandas dataframe
+        """
+        df = df.drop(['index'], axis = 1)
+        df = df[df.notna().any(axis=1)]
+        df  = df[~df['lat'].notnull()]
+        df['latitude'] = df['latitude'].astype(float).abs()
+
+        import datetime
+        df['opening_date'] = pd.to_datetime(df['opening_date'], infer_datetime_format=True, errors = 'coerce')
+        staff_mask = df['staff_numbers'].apply(pd.to_numeric, errors='coerce').isnull()
+        
+        import numpy as np
+        mean_staff = np.mean(df['staff_numbers'])
+        df.loc[staff_mask == True, 'staff_numbers'] = mean_staff
         
         return df

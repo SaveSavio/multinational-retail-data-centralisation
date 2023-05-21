@@ -58,3 +58,6 @@ print(number_of_stores)
 base_url = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/store_details/'
 
 stores_df = de.retrieve_stores_data(base_url, number_of_stores, key)
+
+print(stores_df)
+stores_df.to_csv('stores_data.csv')

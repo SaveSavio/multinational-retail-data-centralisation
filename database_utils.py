@@ -59,7 +59,7 @@ class DatabaseConnector:
          This method will take in a Pandas DataFrame and table name to upload to as an argument.
         """
         # I should test if inspect is necessary
-        from sqlalchemy import create_engine, inspect
+        from sqlalchemy import create_engine 
         import pandas as pd
         # the engine is implemented statically to the sales_data database
         # but we have the tools to make this more "dynamic" by passing the engine parameter
