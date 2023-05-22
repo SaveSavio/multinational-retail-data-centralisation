@@ -73,14 +73,16 @@ class DataCleaning:
         df = df.drop(['index'], axis = 1)
         df = df[df.notna().any(axis=1)]
         df  = df[~df['lat'].notnull()]
+        df.drop(columns = ['lat'], inplace = True)
         df['latitude'] = df['latitude'].astype(float).abs()
 
         import datetime
+        import pandas as pd
         df['opening_date'] = pd.to_datetime(df['opening_date'], infer_datetime_format=True, errors = 'coerce')
         staff_mask = df['staff_numbers'].apply(pd.to_numeric, errors='coerce').isnull()
         
         import numpy as np
-        mean_staff = np.mean(df['staff_numbers'])
+        mean_staff = df['staff_numbers'][staff_mask == False].astype(int).mean()
         df.loc[staff_mask == True, 'staff_numbers'] = mean_staff
         
         return df
