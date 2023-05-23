@@ -63,7 +63,7 @@ class DataCleaning:
     
     def clean_store_data(df):
         """
-        Performs the cleaning of the card data.
+        Performs the cleaning of the stores data.
         Removes any erroneous values, NULL values or errors with formatting.
 
             Parameters: a pandas dataframe

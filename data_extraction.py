@@ -93,3 +93,13 @@ class DataExtractor:
             df = pd.concat([df, tmp], ignore_index=True)
             print(index+1)
         return df
+    
+    def extract_from_s3():
+        """
+        Uses a boto3 package to download data from a S3 server
+
+        Returns:
+            a pandas dataframe
+
+        """
+        pass
