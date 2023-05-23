@@ -66,3 +66,10 @@ print(stores_df)
 stores_data_clean = dc.clean_store_data(stores_df)
 
 dbc.upload_to_db(stores_data_clean, 'dim_store_details')
+
+# log into AWS CLI with (i) Access Key ID and (ii) Secret Access Key
+#aws configure
+  
+from data_extraction import DataExtractor as de
+df = de.extract_from_s3('s3://data-handling-public/products.csv')
+

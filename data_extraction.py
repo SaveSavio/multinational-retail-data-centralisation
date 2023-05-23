@@ -94,12 +94,30 @@ class DataExtractor:
             print(index+1)
         return df
     
-    def extract_from_s3():
+    def extract_from_s3(s3_url):
         """
         Uses a boto3 package to download data from a S3 server
+        You must log into AWS CLI before running this method
+        the method requires a s3 bucket url as parameter
+        anyway it does not provide flexibility to chose the key and filename
+        
+            Parameters:
+                s3_datalake_address
 
-        Returns:
-            a pandas dataframe
+            Returns: 
+                a pandas dataframe
 
         """
-        pass
+        # extract the datalake Bucket from the address line
+        import re
+        start = 's3://'
+        end = '/'
+        bucket = re.search('%s(.*)%s' % (start, end), s3_url).group(1)
+        filename = 'product.csv'
+        # use boto3 client to manage the communication with the s3
+        import boto3
+        s3_client = boto3.resource('s3')
+        s3_client.Bucket(bucket).download_file(Key='products.csv', Filename=filename)
+
+        import pandas as pd
+        return pd.read_csv(filename)
