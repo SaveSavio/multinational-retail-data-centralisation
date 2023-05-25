@@ -98,25 +98,32 @@ class DataCleaning:
                 the same database clean from existing errors
         """
         import pandas as pd
+        import numpy as np
+
+        dfc = df.copy()    
         # remove rows with all null entries
         df = df[df['product_name'].notnull()]
         # create a column that contains the units of the weight column
-        df['units'] = df['weight'].str.replace('\d+', '', regex=True).str.replace('.', '', regex=True)
+        dfc = df.copy()
+        dfc['units'] = df['weight'].str.replace('\d+', '', regex=True).str.replace('.', '', regex=True)
         # analysis the 'units' column, create a list of values that make no sense
         list_of_values = ['GONZJTL', 'ZZTDGUZVU', 'MXRYSHX']
         # remove the rows which 'units' column contains any item in the list_of_values
-        df = df[~df['units'].str.contains('|'.join(list_of_values))]
-        # clean the price column from the £ sign
-        df['product_price'] = df['product_price'].str.replace('£', '').astype(float)
-         # clean the date column and transform it into a datetime object
-        import datetime
-        df['date_added'] = pd.to_datetime(df['date_added'], infer_datetime_format=True, errors = 'coerce')
-        # sort the mispelled entries in the 'removed' column
-        df['removed'] = df['removed'].str.replace('Still_avaliable', 'Still_available')
+        dfc = dfc[~dfc['units'].str.contains('|'.join(list_of_values))]
 
-        return df
+        # clean the price column from the £ sign
+        dfc['product_price'] = dfc['product_price'].str.replace('£', '').astype(float)
+
+        # clean the date column and transform it into a datetime object
+        import datetime
+        dfc['date_added'] = pd.to_datetime(df['date_added'], infer_datetime_format=True, errors = 'coerce')
+
+        # sort the mispelled entries in the 'removed' column
+        dfc['removed'] = df['removed'].str.replace('Still_avaliable', 'Still_available')
+
+        return dfc
     
-    def clean_product_weights(df):
+    def clean_product_weights(dfc):
         """
         Converts the weight column entries from various units to kg
         For those products with multiple items, calculates the total weight by multipling the 
@@ -132,35 +139,31 @@ class DataCleaning:
         import pandas as pd
         # create an empty column that will contain the weight in kg
         import numpy as np
-        df['weight_kg'] = np.nan
-
-        # process the items such as "12 x 100g" by splitting those into a df with two colums, the index[0] containing the number of items
+        # create an empty column that will contain the weight in kg
+        dfcc = dfc.copy()
+        # process the items such as "12 x 100g" by splitting those into a dfc with two colums, the index[0] containing the number of items
         # ("12") and the index[1] the weight of each item (100g). The weight is then cleaned from the unit.
         # the two are multiplied and then converted to kg
-        df['weight_kg'] =  df[df['units'].str.contains('x')]['weight'].str.extract(r'(\d+)\s*x\s*(\d+)', expand=False)[0].astype(float) * df[df['units'].str.contains('x')]['weight'].str.extract(r'(\d+)\s*x\s*(\d+)', expand=False)[1].astype(float) * 0.001
+        dfcc['weight_kg'] =  dfc[dfc['units'].str.contains('x')]['weight'].str.extract(r'(\d+)\s*x\s*(\d+)', expand=False)[0].astype(float) * dfc[dfc['units'].str.contains('x')]['weight'].str.extract(r'(\d+)\s*x\s*(\d+)', expand=False)[1].astype(float) * 0.001
 
         # this line just converts the columns with 'units' equal to kg into a float and assign it to the column 'weight clean"
-        mask = df['units'] == 'kg'
-        masked_df = df[mask]
-        df.loc[mask, 'weight_kg'] = df.loc[mask, 'weight'].str.replace('kg', '').astype(float)
+        mask = dfc['units'] == 'kg'
+        dfcc.loc[mask, 'weight_kg'] = dfc.loc[mask, 'weight'].str.replace('kg', '').astype(float)
 
         # this line converts the columns with 'units' equal to g into a float, then converts to kg, and assign it to the column 'weight clean"
-        mask = df['units'] == 'g'
-        masked_df = df[mask]
-        df.loc[mask, 'weight_kg'] = df.loc[mask, 'weight'].str.replace('g', '').astype(float) * 0.001
+        mask = dfc['units'] == 'g'
+        dfcc.loc[mask, 'weight_kg'] = dfc.loc[mask, 'weight'].str.replace('g', '').astype(float) * 0.001
 
         # this line converts the columns with 'units' equal to ml into a float, then converts to kg, and assign it to the column 'weight clean"
 
-        mask = df['units'] == 'ml'
-        masked_df = df[mask]
-        df.loc[mask, 'weight_kg'] = df.loc[mask, 'weight'].str.replace('ml', '').astype(float) * 0.001
+        mask = dfc['units'] == 'ml'
+        dfcc.loc[mask, 'weight_kg'] = dfc.loc[mask, 'weight'].str.replace('ml', '').astype(float) * 0.001
 
         # this line converts the columns with 'units' equal to oz into a float, then converts to kg, and assign it to the column 'weight clean"
-        mask = df['units'] == 'oz'
-        masked_df = df[mask]
-        df.loc[mask, 'weight_kg'] = df.loc[mask, 'weight'].str.replace('oz', '').astype(float) * 0.0283495
+        mask = dfc['units'] == 'oz'
+        dfcc.loc[mask, 'weight_kg'] = dfc.loc[mask, 'weight'].str.replace('oz', '').astype(float) * 0.0283495
 
         # drop two columns made redundant by the cleaning process
-        df = df.drop(['weight', 'units'], axis = 1)
+        dfcc = dfcc.drop(['weight', 'units', 'Unnamed: 0'], axis = 1)
 
-        return df
+        return dfcc

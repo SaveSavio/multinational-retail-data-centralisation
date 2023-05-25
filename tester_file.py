@@ -85,4 +85,5 @@ products_df = de.extract_from_s3('s3://data-handling-public/products.csv')
 products_df_clean = dc.clean_product_data(products_df)
 products_df_clean_converted_units = dc.clean_product_weights(products_df_clean)
 
+
 dbc.upload_to_db(products_df_clean_converted_units, 'dim_products')
