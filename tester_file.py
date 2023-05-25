@@ -69,7 +69,20 @@ dbc.upload_to_db(stores_data_clean, 'dim_store_details')
 
 # log into AWS CLI with (i) Access Key ID and (ii) Secret Access Key
 #aws configure
-  
-from data_extraction import DataExtractor as de
-df = de.extract_from_s3('s3://data-handling-public/products.csv')
 
+import subprocess
+
+# Pause script execution
+input("Press Enter to pause the script and log in to AWC CLI")
+
+# Log into AWS CLI
+subprocess.call(["aws", "configure"])
+
+from data_extraction import DataExtractor as de
+products_df = de.extract_from_s3('s3://data-handling-public/products.csv')
+#print(df)
+
+products_df_clean = dc.clean_product_data(products_df)
+products_df_clean_converted_units = dc.clean_product_weights(products_df_clean)
+
+dbc.upload_to_db(products_df_clean_converted_units, 'dim_products')
