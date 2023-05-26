@@ -91,7 +91,7 @@ class DataExtractor:
             store = requests.get(url, headers = key)
             tmp = pd.json_normalize(store.json())
             df = pd.concat([df, tmp], ignore_index=True)
-            print(index+1)
+            print(index+1, end="")
         return df
     
     def extract_from_s3(s3_url):

@@ -177,5 +177,5 @@ class DataCleaning:
             Results:
                 A pandas dataframe
         """
-        df.drop(['first_name', 'last_name', '1'], axis = 1, inplace = True)
+        df.drop(['first_name', 'last_name', '1', 'level_0'], axis = 1, inplace = True)
         return df
