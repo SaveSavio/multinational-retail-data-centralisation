@@ -1,4 +1,5 @@
 
+
 # import the DatabaseConnector class
 # it serves for connecting and uploading data from various sources
 from database_utils import DatabaseConnector as dbc
@@ -87,3 +88,8 @@ products_df_clean_converted_units = dc.clean_product_weights(products_df_clean)
 
 
 dbc.upload_to_db(products_df_clean_converted_units, 'dim_products')
+
+#print(tables_list)
+orders_data = de.read_RDS_table(tables_list[2], RDS_engine)
+orders_data.to_csv('orders_data.csv')
+
