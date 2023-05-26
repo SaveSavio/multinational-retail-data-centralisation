@@ -167,3 +167,15 @@ class DataCleaning:
         dfcc = dfcc.drop(['weight', 'units', 'Unnamed: 0'], axis = 1)
 
         return dfcc
+
+    def clean_orders_data(df):
+        """
+        Cleans the orders_data downloaded from the AWS RDS server
+            Parameters:
+                A pandas dataframe
+
+            Results:
+                A pandas dataframe
+        """
+        df.drop(['first_name', 'last_name', '1'], axis = 1, inplace = True)
+        return df

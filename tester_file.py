@@ -91,5 +91,7 @@ dbc.upload_to_db(products_df_clean_converted_units, 'dim_products')
 
 #print(tables_list)
 orders_data = de.read_RDS_table(tables_list[2], RDS_engine)
-orders_data.to_csv('orders_data.csv')
+#orders_data.to_csv('orders_data.csv')
+orders_data_clean = dc.clean_orders_data(orders_data)
 
+dbc.upload_to_db(orders_data_clean, 'orders_table')
