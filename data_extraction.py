@@ -91,10 +91,10 @@ class DataExtractor:
             store = requests.get(url, headers = key)
             tmp = pd.json_normalize(store.json())
             df = pd.concat([df, tmp], ignore_index=True)
-            print(index+1, end="")
+            print(index+1)
         return df
     
-    def extract_from_s3(s3_url):
+    def extract_from_s3(s3_url, filename):
         """
         Uses a boto3 package to download data from a S3 server
         You must log into AWS CLI before running this method
@@ -113,11 +113,29 @@ class DataExtractor:
         start = 's3://'
         end = '/'
         bucket = re.search('%s(.*)%s' % (start, end), s3_url).group(1)
-        filename = 'product.csv'
         # use boto3 client to manage the communication with the s3
         import boto3
         s3_client = boto3.resource('s3')
-        s3_client.Bucket(bucket).download_file(Key='products.csv', Filename=filename)
+        s3_client.Bucket(bucket).download_file(Key=filename, Filename=filename)
 
         import pandas as pd
         return pd.read_csv(filename)
+    
+    def download_date_details(url):
+        """
+        Downloads a json file and converts it to a pandas dataframe
+
+            Parameters: a url pointing to the json file to be downloaded
+
+            Returns: a pandas dataframe
+
+        """
+        import requests
+        import pandas as pd
+
+        solditems = requests.get(url) # (your url)
+        data = solditems.json()
+        df = pd.DataFrame.from_dict(data)
+        
+        return df
+    

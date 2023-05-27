@@ -179,3 +179,27 @@ class DataCleaning:
         """
         df.drop(['first_name', 'last_name', '1', 'level_0'], axis = 1, inplace = True)
         return df
+
+    def clean_date_details(df):
+        """
+        Cleans the sale date details
+
+            Parameters: a pandas dataframe containing the sales information
+
+            Returns: a pandas dataframe cleaned from erroneous values
+        """
+        print('cleaning date details')
+
+        import pandas as pd
+        # removes NaN
+        df = df[~df['time_period'].isnull()]
+        # removes other erroneous values
+        list_of_values = ['Evening', 'Midday', 'Morning', 'Late_Hours']
+        df = df[df['time_period'].str.contains('|'.join(list_of_values))]
+
+        # convert the time info spread across four columns into one datetime object
+        df['Datetime'] = pd.to_datetime(df[['year','month','day', 'timestamp']]
+                        .astype(str).apply(' '.join, 1), format='%Y %m %d %H:%M:%S')
+        df.drop(['timestamp', 'month', 'year', 'day'], axis = 1, inplace = True)
+
+        return df
