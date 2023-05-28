@@ -11,8 +11,7 @@ file_name = 'db_creds.yaml'
 cred_dict = dbc.read_db_creds(file_name)
 print(cred_dict)
 
-# initia
-# lize the SQLalchemy engine with the provided credentials
+# initialize the SQLalchemy engine with the provided credentials
 RDS_engine = dbc.init_db_engine(cred_dict)
 
 # import the DataExtractor class

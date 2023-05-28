@@ -58,6 +58,12 @@ class DatabaseConnector:
     def upload_to_db(dataframe, table_name):
         """
          This method will take in a Pandas DataFrame and table name to upload to as an argument.
+         It uploads the dataframe to the sales_data SQL database on the localhost.
+
+            Parameters: a pandas dataframe to be uploaded, the 
+
+            Returns: -
+
         """
         # I should test if inspect is necessary
         from sqlalchemy import create_engine 
