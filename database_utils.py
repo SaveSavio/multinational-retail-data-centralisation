@@ -33,6 +33,7 @@ class DatabaseConnector:
             
             Returns:    
                 Initialises and returns an sqlalchemy database engine.
+                
         """
 
         from sqlalchemy import create_engine
