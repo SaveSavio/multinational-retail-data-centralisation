@@ -26,6 +26,15 @@
             "name": "aicore",
             "database": "aicoredb_test_2",
             "username": "postgres"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "sales_data_2",
+            "database": "sales_data_2",
+            "username": "postgres"
         }
     ]
 }
