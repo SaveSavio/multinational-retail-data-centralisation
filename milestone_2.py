@@ -1,5 +1,3 @@
-
-
 # import the DatabaseConnector class
 # it serves for connecting and uploading data from various sources
 from database_utils import DatabaseConnector as dbc
@@ -53,7 +51,7 @@ key = {'x-api-key': 'yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX'}
 url = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/number_stores'
 
 number_of_stores = de.list_number_of_stores(url, key)
-print(number_of_stores)
+print("the number of stores to be extracted is: ", number_of_stores)
 
 
 base_url = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/store_details/'
@@ -62,11 +60,14 @@ stores_df = de.retrieve_stores_data(base_url, number_of_stores, key)
 
 print(stores_df)
 #stores_df.to_csv('stores_data.csv')
-
 stores_data_clean = dc.clean_store_data(stores_df)
+
 
 dbc.upload_to_db(stores_data_clean, 'dim_store_details')
 
+
+
+#%%
 # log into AWS CLI with (i) Access Key ID and (ii) Secret Access Key
 #aws configure
 
