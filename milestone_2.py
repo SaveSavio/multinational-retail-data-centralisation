@@ -45,7 +45,7 @@ card_data_clean = dc.clean_card_data(card_data)
 # print the clean data
 print(card_data_clean)
 
-dbc.upload_to_db(card_data_clean, 'card_data_clean')
+dbc.upload_to_db(card_data_clean, 'dim_card_details')
 
 key = {'x-api-key': 'yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX'}
 url = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/number_stores'

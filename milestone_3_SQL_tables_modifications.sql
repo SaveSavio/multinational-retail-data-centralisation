@@ -1,4 +1,4 @@
-/* ################ TASK 1 ##################
+/* ############################ TASK 1 #########################################
 Change the data types to correspond to those seen in the table below.
 
 +------------------+--------------------+--------------------+
@@ -34,7 +34,7 @@ Change the data types to correspond to those seen in the table below.
 
 
 
-/* ################ TASK 2 ##################
+/* ########################### TASK 2 ###############################################
 The column required to be changed in the users table are as follows:
 
 +----------------+--------------------+--------------------+
@@ -62,7 +62,7 @@ The column required to be changed in the users table are as follows:
 --     ALTER COLUMN user_uuid TYPE UUID USING user_uuid::uuid,
 --     ALTER COLUMN join_date TYPE DATE;
 
-/* ################ TASK 3 ##################
+/* ######################### TASK 3 ###################################################
 There are two latitude columns in the store details table.
 Using SQL, merge one of the columns into the other so you have one latitude column.
     This task in not performed as I sorted the latitude column in the data cleaning process
@@ -86,17 +86,100 @@ Then set the data types for each column as shown below:
 --     max(length(store_code)) as store_code_len
 -- FROM dim_store_details;
 
-SELECT *
-FROM dim_store_details
-WHERE store_code LIKE '%1388012W'
+
+-- UPDATE dim_store_details
+-- SET longitude = NULL 
+-- WHERE store_type = 'Web Portal';
+
+
+-- UPDATE dim_store_details
+-- SET staff_numbers = '50' 
+-- WHERE staff_numbers LIKE '46.9%';
+
+-- SELECT *
+-- FROM dim_store_details
+-- WHERE store_type = 'Web Portal';
 
 -- ALTER TABLE IF EXISTS dim_store_details
---     ALTER COLUMN longitude TYPE FLOAT,
+--     ALTER COLUMN longitude TYPE FLOAT USING longitude::float,
 --     ALTER COLUMN locality TYPE VARCHAR(255),
---     ALTER COLUMN store_code TYPE VARCHAR(11),
---     ALTER COLUMN staff_numbers TYPE SMALLING,
+--     ALTER COLUMN store_code TYPE VARCHAR(12),
+--     ALTER COLUMN staff_numbers TYPE SMALLINT USING staff_numbers::SMALLINT,
 --     ALTER COLUMN opening_date TYPE DATE,
---     ALTER COLUMN store_type TYPE VARCHAR(255) NULLABLE
---     ALTER COLUMN latitude TYPE FLOAT,
---     ALTER COLUMN country_code TYPE VARCHAR(?),
+--     ALTER COLUMN store_type TYPE VARCHAR(255), -- not sure how to cast nullable
+--     ALTER COLUMN latitude TYPE FLOAT USING latitude::float,
+--     ALTER COLUMN country_code TYPE VARCHAR(12),
 --     ALTER COLUMN continent TYPE VARCHAR(255);
+
+/* ######################## TASK 4 ##########################################################
+You will need to do some work on the products table before casting the data types correctly.
+The product_price column has a £ character which you need to remove using SQL. --> I already did this in pandas
+The team that handles the deliveries would like a new human-readable column added for the weight
+so they can quickly make decisions on delivery weights.
+Add a new column weight_class which will contain human-readable values based on the weight range of the product.
+
++--------------------------+-------------------+
+| weight_class VARCHAR(?)  | weight range(kg)  |
++--------------------------+-------------------+
+| Light                    | < 2               |
+| Mid_Sized                | >= 2 - < 40       |
+| Heavy                    | >= 40 - < 140     |
+| Truck_Required           | => 140            |
++----------------------------+-----------------+
+ */
+
+-- ALTER TABLE dim_products
+-- ADD COLUMN weight_class VARCHAR(255);
+
+-- UPDATE dim_products
+-- SET weight_class = 
+--   CASE
+--     WHEN weight_kg < 2 THEN 'Light'
+--     WHEN weight_kg BETWEEN 2 AND 40 THEN 'Mid_Sized'
+--     WHEN weight_kg BETWEEN 40 AND 140 THEN 'Heavy'
+--     ELSE 'Truck_Required'
+--   END;
+
+-- SELECT
+
+
+/* ######################### TASK 5 #################################################
+After all the columns are created and cleaned, change the data types of the products table.
+You will want to rename the removed column to still_available before changing its data type.
+Make the changes to the columns to cast them to the following data types:
+
++-----------------+--------------------+--------------------+
+|  dim_products   | current data type  | required data type |
++-----------------+--------------------+--------------------+
+| product_price   | TEXT               | FLOAT              |
+| weight          | TEXT               | FLOAT              |
+| EAN             | TEXT               | VARCHAR(?)         |
+| product_code    | TEXT               | VARCHAR(?)         |
+| date_added      | TEXT               | DATE               |
+| uuid            | TEXT               | UUID               |
+| still_available | TEXT               | BOOL               |
+| weight_class    | TEXT               | VARCHAR(?)         |
++-----------------+--------------------+--------------------+
+ */
+
+SELECT
+    max(length("EAN")) as EAN_len,
+    max(length(product_code)) as product_code_len,
+    max(length(weight_class)) as weight_class_len
+FROM dim_products;
+
+ALTER TABLE dim_products
+RENAME COLUMN removed TO still_available;
+
+-- I have to change the removed table to a boolean by
+-- substituting the categories with a BOOL
+
+ALTER TABLE IF EXISTS dim_products
+    ALTER COLUMN product_price TYPE FLOAT USING product_price::float,
+    ALTER COLUMN weight_kg TYPE  FLOAT USING weight_kg::float,
+    ALTER COLUMN "EAN" TYPE VARCHAR(17),
+    ALTER COLUMN product_code TYPE VARCHAR(11),
+    ALTER COLUMN date_added TYPE DATE,
+    ALTER COLUMN uuid TYPE UUID  USING uuid::UUID,
+    ALTER COLUMN still_available TYPE BOOL USING still_available::BOOL,
+    ALTER COLUMN weight_class TYPE VARCHAR(14);
