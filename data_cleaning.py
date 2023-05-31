@@ -53,12 +53,16 @@ class DataCleaning:
         """
         import pandas as pd
         import datetime
+
         df = df[df['card_number']!='NULL']
         df = df[df['card_provider'].isin(['Diners Club / Carte Blanche', 'American Express', 'JCB 16 digit',
        'JCB 15 digit', 'Maestro', 'Mastercard', 'Discover',
        'VISA 19 digit', 'VISA 16 digit', 'VISA 13 digit'])]
         df['date_payment_confirmed'] = pd.to_datetime(df['date_payment_confirmed'], infer_datetime_format=True, errors = 'coerce')
-        
+        df['card_number'] = pd.to_numeric(df['card_number'], errors='coerce')
+        df = df[~df['card_number'].isnull()]
+        df['card_number'] = df['card_number'].astype(int)
+
         return df
     
     def clean_store_data(df):

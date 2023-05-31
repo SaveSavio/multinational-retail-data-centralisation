@@ -1,3 +1,4 @@
+
 /* ############################ TASK 1 #########################################
 Change the data types to correspond to those seen in the table below.
 
@@ -23,12 +24,13 @@ Change the data types to correspond to those seen in the table below.
 --     max(length(product_code)) as product_code_len
 -- FROM orders_table;
 
+
 ALTER TABLE IF EXISTS orders_table
     ALTER COLUMN date_uuid TYPE UUID USING date_uuid::uuid,
     ALTER COLUMN card_number TYPE VARCHAR(19),
     ALTER COLUMN store_code TYPE VARCHAR(12),
-    ALTER COLUMN product_code TYPE VARCHAR(11);
-    --ALTER COLUMN product_quantity TYPE SMALLINT;
+    ALTER COLUMN product_code TYPE VARCHAR(11),
+    ALTER COLUMN product_quantity TYPE SMALLINT USING product_quantity::smallint;
 
 
 
@@ -263,3 +265,44 @@ ADD PRIMARY KEY (user_uuid);
 SELECT product_code
 FROM dim_products
 WHERE product_code IS NULL;
+
+/* 
+With the primary keys created in the tables prefixed with dim we can now create the foreign keys in the orders_table
+to reference the primary keys in the other tables.
+Use SQL to create those foreign key constraints that reference the primary keys of the other table.
+This makes the star-based database schema complete.
+*/
+
+/* 
+    referencing_table is the name of the table that will contain the foreign key ----> orders_table
+    fk_constraint_name is an optional name you can give to the foreign key constraint.
+    referencing_column is the column in the referencing_table that will hold the foreign key values ---> orders_table.column
+    referenced_table is the name of the table being referenced.
+    referenced_column is the column in the referenced_table that is being referenced.
+ */
+ALTER TABLE orders_table
+-- ADD CONSTRAINT fk_constraint_name
+FOREIGN KEY (card_number)
+REFERENCES dim_card_details (card_number);
+
+ALTER TABLE orders_table
+-- ADD CONSTRAINT fk_constraint_name
+FOREIGN KEY (date_uuid)
+REFERENCES dim_date_times (date_uuid);
+
+ALTER TABLE orders_table
+-- ADD CONSTRAINT fk_constraint_name
+FOREIGN KEY (product_code)
+REFERENCES dim_products (product_code);
+
+ALTER TABLE orders_table
+-- ADD CONSTRAINT fk_constraint_name
+FOREIGN KEY (store_code)
+REFERENCES dim_store_details (store_code);
+
+ALTER TABLE orders_table
+-- ADD CONSTRAINT fk_constraint_name
+FOREIGN KEY (user_uuid)
+REFERENCES dim_users (user_uuid);
+
+
