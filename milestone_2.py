@@ -66,8 +66,6 @@ stores_data_clean = dc.clean_store_data(stores_df)
 dbc.upload_to_db(stores_data_clean, 'dim_store_details')
 
 
-
-#%%
 # log into AWS CLI with (i) Access Key ID and (ii) Secret Access Key
 #aws configure
 
@@ -79,7 +77,6 @@ input("Press Enter to pause the script and log in to AWC CLI")
 # Log into AWS CLI
 subprocess.call(["aws", "configure"])
 
-from data_extraction import DataExtractor as de
 products_df = de.extract_from_s3('s3://data-handling-public/', filename = 'products.csv')
 #print(df)
 
@@ -88,7 +85,6 @@ products_df_clean_converted_units = dc.clean_product_weights(products_df_clean)
 
 
 dbc.upload_to_db(products_df_clean_converted_units, 'dim_products')
-
 #print(tables_list)
 orders_data = de.read_RDS_table(tables_list[2], RDS_engine)
 #orders_data.to_csv('orders_data.csv')

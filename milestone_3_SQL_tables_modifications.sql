@@ -23,14 +23,12 @@ Change the data types to correspond to those seen in the table below.
 --     max(length(product_code)) as product_code_len
 -- FROM orders_table;
 
--- ALTER TABLE IF EXISTS orders_table
---     ALTER COLUMN date_uuid TYPE UUID,
---     ALTER COLUMN date_uuid TYPE UUID,
---     ALTER COLUMN card_number TYPE VARCHAR(19),
---     ALTER COLUMN store_code TYPE VARCHAR(12),
---     ALTER COLUMN product_code TYPE VARCHAR(11),
---     ALTER COLUMN product_quantity TYPE SMALLINT;
-
+ALTER TABLE IF EXISTS orders_table
+    ALTER COLUMN date_uuid TYPE UUID USING date_uuid::uuid,
+    ALTER COLUMN card_number TYPE VARCHAR(19),
+    ALTER COLUMN store_code TYPE VARCHAR(12),
+    ALTER COLUMN product_code TYPE VARCHAR(11);
+    --ALTER COLUMN product_quantity TYPE SMALLINT;
 
 
 
@@ -54,13 +52,13 @@ The column required to be changed in the users table are as follows:
 --     max(length(country_code)) as country_code_len
 -- FROM dim_users;
 
--- ALTER TABLE IF EXISTS dim_users
---     ALTER COLUMN first_name TYPE VARCHAR(255),
---     ALTER COLUMN last_name TYPE VARCHAR(255),
---     ALTER COLUMN date_of_birth TYPE DATE,
---     ALTER COLUMN country_code TYPE VARCHAR(2),
---     ALTER COLUMN user_uuid TYPE UUID USING user_uuid::uuid,
---     ALTER COLUMN join_date TYPE DATE;
+ALTER TABLE IF EXISTS dim_users
+    ALTER COLUMN first_name TYPE VARCHAR(255),
+    ALTER COLUMN last_name TYPE VARCHAR(255),
+    ALTER COLUMN date_of_birth TYPE DATE,
+    ALTER COLUMN country_code TYPE VARCHAR(2),
+    ALTER COLUMN user_uuid TYPE UUID USING user_uuid::uuid,
+    ALTER COLUMN join_date TYPE DATE;
 
 /* ######################### TASK 3 ###################################################
 There are two latitude columns in the store details table.
@@ -87,29 +85,29 @@ Then set the data types for each column as shown below:
 -- FROM dim_store_details;
 
 
--- UPDATE dim_store_details
--- SET longitude = NULL 
--- WHERE store_type = 'Web Portal';
+UPDATE dim_store_details
+SET longitude = NULL 
+WHERE store_type = 'Web Portal';
 
 
--- UPDATE dim_store_details
--- SET staff_numbers = '50' 
--- WHERE staff_numbers LIKE '46.9%';
+UPDATE dim_store_details
+SET staff_numbers = '50' 
+WHERE staff_numbers LIKE '46.9%';
 
 -- SELECT *
 -- FROM dim_store_details
 -- WHERE store_type = 'Web Portal';
 
--- ALTER TABLE IF EXISTS dim_store_details
---     ALTER COLUMN longitude TYPE FLOAT USING longitude::float,
---     ALTER COLUMN locality TYPE VARCHAR(255),
---     ALTER COLUMN store_code TYPE VARCHAR(12),
---     ALTER COLUMN staff_numbers TYPE SMALLINT USING staff_numbers::SMALLINT,
---     ALTER COLUMN opening_date TYPE DATE,
---     ALTER COLUMN store_type TYPE VARCHAR(255), -- not sure how to cast nullable
---     ALTER COLUMN latitude TYPE FLOAT USING latitude::float,
---     ALTER COLUMN country_code TYPE VARCHAR(12),
---     ALTER COLUMN continent TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS dim_store_details
+    ALTER COLUMN longitude TYPE FLOAT USING longitude::float,
+    ALTER COLUMN locality TYPE VARCHAR(255),
+    ALTER COLUMN store_code TYPE VARCHAR(12),
+--    ALTER COLUMN staff_numbers TYPE SMALLINT USING staff_numbers::SMALLINT,
+    ALTER COLUMN opening_date TYPE DATE,
+    ALTER COLUMN store_type TYPE VARCHAR(255), -- not sure how to cast nullable
+    ALTER COLUMN latitude TYPE FLOAT USING latitude::float,
+    ALTER COLUMN country_code TYPE VARCHAR(12),
+    ALTER COLUMN continent TYPE VARCHAR(255);
 
 /* ######################## TASK 4 ##########################################################
 You will need to do some work on the products table before casting the data types correctly.
@@ -128,17 +126,17 @@ Add a new column weight_class which will contain human-readable values based on 
 +----------------------------+-----------------+
  */
 
--- ALTER TABLE dim_products
--- ADD COLUMN weight_class VARCHAR(255);
+ALTER TABLE dim_products
+ADD COLUMN weight_class VARCHAR(255);
 
--- UPDATE dim_products
--- SET weight_class = 
---   CASE
---     WHEN weight_kg < 2 THEN 'Light'
---     WHEN weight_kg BETWEEN 2 AND 40 THEN 'Mid_Sized'
---     WHEN weight_kg BETWEEN 40 AND 140 THEN 'Heavy'
---     ELSE 'Truck_Required'
---   END;
+UPDATE dim_products
+SET weight_class = 
+  CASE
+    WHEN weight_kg < 2 THEN 'Light'
+    WHEN weight_kg BETWEEN 2 AND 40 THEN 'Mid_Sized'
+    WHEN weight_kg BETWEEN 40 AND 140 THEN 'Heavy'
+    ELSE 'Truck_Required'
+  END;
 
 -- SELECT
 
@@ -162,17 +160,22 @@ Make the changes to the columns to cast them to the following data types:
 +-----------------+--------------------+--------------------+
  */
 
-SELECT
-    max(length("EAN")) as EAN_len,
-    max(length(product_code)) as product_code_len,
-    max(length(weight_class)) as weight_class_len
-FROM dim_products;
+-- SELECT
+--     max(length("EAN")) as EAN_len,
+--     max(length(product_code)) as product_code_len,
+--     max(length(weight_class)) as weight_class_len
+-- FROM dim_products;
 
 ALTER TABLE dim_products
 RENAME COLUMN removed TO still_available;
 
 -- I have to change the removed table to a boolean by
 -- substituting the categories with a BOOL
+
+ALTER TABLE dim_products
+ALTER COLUMN still_available TYPE BOOLEAN
+USING (still_available = 'Still_available');
+
 
 ALTER TABLE IF EXISTS dim_products
     ALTER COLUMN product_price TYPE FLOAT USING product_price::float,
@@ -181,5 +184,82 @@ ALTER TABLE IF EXISTS dim_products
     ALTER COLUMN product_code TYPE VARCHAR(11),
     ALTER COLUMN date_added TYPE DATE,
     ALTER COLUMN uuid TYPE UUID  USING uuid::UUID,
-    ALTER COLUMN still_available TYPE BOOL USING still_available::BOOL,
+    ALTER COLUMN still_available TYPE BOOL,
     ALTER COLUMN weight_class TYPE VARCHAR(14);
+
+
+/* ###################### TASK 6 ###########################################
+Now update the date table with the correct types:
+
++-----------------+-------------------+--------------------+
+| dim_date_times  | current data type | required data type |
++-----------------+-------------------+--------------------+
+| month           | TEXT              | VARCHAR(?)         |
+| year            | TEXT              | VARCHAR(?)         |
+| day             | TEXT              | VARCHAR(?)         |
+| time_period     | TEXT              | VARCHAR(?)         |
+| date_uuid       | TEXT              | UUID               |
++-----------------+-------------------+--------------------+
+ */
+
+-- SELECT
+-- --    max(length(month)) as month_len, -- I have deleted the month, year, day columns basically because it is redundant
+-- --    max(length(year)) as year_len,
+-- --    max(length(day)) as day_len,
+--     max(length(time_period)) as time_period_len
+-- FROM dim_date_times;
+
+ALTER TABLE IF EXISTS dim_date_times
+     ALTER COLUMN time_period TYPE VARCHAR(10),
+     ALTER COLUMN date_uuid TYPE UUID  USING date_uuid::UUID;
+
+
+/* ###################### TASK 7 ##############################################
+Now we need to update the last table for the card details.
+Make the associated changes after finding out what the lengths of each variable should be:
+
++------------------------+-------------------+--------------------+
+|    dim_card_details    | current data type | required data type |
++------------------------+-------------------+--------------------+
+| card_number            | TEXT              | VARCHAR(?)         |
+| expiry_date            | TEXT              | VARCHAR(?)         |
+| date_payment_confirmed | TEXT              | DATE               |
++------------------------+-------------------+--------------------+
+ */
+
+-- SELECT
+--     max(length(card_number)) as card_num_len,
+--     max(length(expiry_date)) as expiry_date_len
+-- FROM dim_card_details;
+
+ALTER TABLE IF EXISTS dim_card_details
+     ALTER COLUMN card_number TYPE VARCHAR(22),
+     ALTER COLUMN expiry_date TYPE VARCHAR(5),
+     ALTER COLUMN date_payment_confirmed TYPE DATE;
+
+
+/* #################### TASK 8 ############################################
+Now that the tables have the appropriate data types we can begin adding the primary keys to each of the tables prefixed with dim.
+Each table will serve the orders_table which will be the single source of truth for our orders.
+Check the column header of the orders_table you will see all but one of the columns exist in one of our tables prefixed with dim.
+We need to update the columns in the dim tables with a primary key that matches the same column in the orders_table.
+Using SQL, update the respective columns as primary key columns. */
+
+ALTER TABLE dim_card_details 
+ADD PRIMARY KEY (card_number);
+
+ALTER TABLE dim_date_times 
+ADD PRIMARY KEY (date_uuid);
+
+ALTER TABLE dim_products 
+ADD PRIMARY KEY (product_code);
+
+ALTER TABLE dim_store_details 
+ADD PRIMARY KEY (store_code);
+
+ALTER TABLE dim_users 
+ADD PRIMARY KEY (user_uuid);
+
+SELECT product_code
+FROM dim_products
+WHERE product_code IS NULL;
