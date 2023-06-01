@@ -61,7 +61,7 @@ class DataCleaning:
         'JCB 15 digit', 'Maestro', 'Mastercard', 'Discover',
         'VISA 19 digit', 'VISA 16 digit', 'VISA 13 digit'])]
         # transform the payment date into a datetime object
-        df['date_payment_confirmed'] = pd.to_datetime(df2['date_payment_confirmed'], infer_datetime_format=True, errors = 'coerce')
+        df['date_payment_confirmed'] = pd.to_datetime(df['date_payment_confirmed'], infer_datetime_format=True, errors = 'coerce')
         # remove the '???' from some of the entries
         df['card_number'] = df['card_number'].str.replace('?', '', regex = True)
 
