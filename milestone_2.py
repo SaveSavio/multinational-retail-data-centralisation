@@ -35,11 +35,6 @@ dbc.upload_to_db(user_data_clean, 'dim_users')
 
 print(user_data_clean)
 
-#%%
-from data_cleaning import DataCleaning as dc
-from data_extraction import DataExtractor as de
-from database_utils import DatabaseConnector as dbc
-
 # extract all data from the following like
 pdf_link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf'
 card_data = de.retrieve_pdf_data(pdf_link)
@@ -51,7 +46,6 @@ card_data_clean = dc.clean_card_data(card_data)
 print(card_data_clean)
 
 dbc.upload_to_db(card_data_clean, 'dim_card_details')
-#%%
 
 key = {'x-api-key': 'yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX'}
 url = 'https://aqj7u5id95.execute-api.eu-west-1.amazonaws.com/prod/number_stores'
