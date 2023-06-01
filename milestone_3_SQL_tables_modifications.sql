@@ -18,15 +18,16 @@ Change the data types to correspond to those seen in the table below.
 -- card number was cast as a bigint
 -- it does not really matter, I will convert it to text here
 
--- SELECT
---     max(length(card_number)) as card_number_len,
---     max(length(store_code)) as store_code_len,
---     max(length(product_code)) as product_code_len
--- FROM orders_table;
+SELECT
+    max(length(card_number)) as card_number_len,
+    max(length(store_code)) as store_code_len,
+    max(length(product_code)) as product_code_len
+FROM orders_table;
 
 
 ALTER TABLE IF EXISTS orders_table
     ALTER COLUMN date_uuid TYPE UUID USING date_uuid::uuid,
+    ALTER COLUMN user_uuid TYPE UUID USING user_uuid::uuid,
     ALTER COLUMN card_number TYPE VARCHAR(19),
     ALTER COLUMN store_code TYPE VARCHAR(12),
     ALTER COLUMN product_code TYPE VARCHAR(11),
@@ -229,13 +230,13 @@ Make the associated changes after finding out what the lengths of each variable 
 +------------------------+-------------------+--------------------+
  */
 
--- SELECT
---     max(length(card_number)) as card_num_len,
---     max(length(expiry_date)) as expiry_date_len
--- FROM dim_card_details;
+SELECT
+    max(length(card_number)) as card_num_len,
+    max(length(expiry_date)) as expiry_date_len
+FROM dim_card_details;
 
 ALTER TABLE IF EXISTS dim_card_details
-     ALTER COLUMN card_number TYPE VARCHAR(22),
+    ALTER COLUMN card_number TYPE VARCHAR(19),
      ALTER COLUMN expiry_date TYPE VARCHAR(5),
      ALTER COLUMN date_payment_confirmed TYPE DATE;
 
@@ -281,27 +282,27 @@ This makes the star-based database schema complete.
     referenced_column is the column in the referenced_table that is being referenced.
  */
 ALTER TABLE orders_table
--- ADD CONSTRAINT fk_constraint_name
+ADD CONSTRAINT fk_card_number
 FOREIGN KEY (card_number)
 REFERENCES dim_card_details (card_number);
 
 ALTER TABLE orders_table
--- ADD CONSTRAINT fk_constraint_name
+ADD CONSTRAINT fk_date_uuid
 FOREIGN KEY (date_uuid)
 REFERENCES dim_date_times (date_uuid);
 
 ALTER TABLE orders_table
--- ADD CONSTRAINT fk_constraint_name
+ADD CONSTRAINT fk_product_code
 FOREIGN KEY (product_code)
 REFERENCES dim_products (product_code);
 
 ALTER TABLE orders_table
--- ADD CONSTRAINT fk_constraint_name
+ADD CONSTRAINT fk_store_code
 FOREIGN KEY (store_code)
 REFERENCES dim_store_details (store_code);
 
 ALTER TABLE orders_table
--- ADD CONSTRAINT fk_constraint_name
+ADD CONSTRAINT fk_user_uuid
 FOREIGN KEY (user_uuid)
 REFERENCES dim_users (user_uuid);
 

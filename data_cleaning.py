@@ -63,7 +63,7 @@ class DataCleaning:
         # transform the payment date into a datetime object
         df['date_payment_confirmed'] = pd.to_datetime(df['date_payment_confirmed'], infer_datetime_format=True, errors = 'coerce')
         # remove the '???' from some of the entries
-        df['card_number'] = df['card_number'].str.replace('?', '', regex = True)
+        df['card_number'] = df['card_number'].astype(str).str.replace('?', '', regex = True).astype(int)
 
         return df
     
