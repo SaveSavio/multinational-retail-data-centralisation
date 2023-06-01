@@ -54,14 +54,16 @@ class DataCleaning:
         import pandas as pd
         import datetime
 
+        # remove some NULL entries
         df = df[df['card_number']!='NULL']
+        # remove some wrong entries by removing the lines with wrong card provides
         df = df[df['card_provider'].isin(['Diners Club / Carte Blanche', 'American Express', 'JCB 16 digit',
-       'JCB 15 digit', 'Maestro', 'Mastercard', 'Discover',
-       'VISA 19 digit', 'VISA 16 digit', 'VISA 13 digit'])]
-        df['date_payment_confirmed'] = pd.to_datetime(df['date_payment_confirmed'], infer_datetime_format=True, errors = 'coerce')
-        df['card_number'] = pd.to_numeric(df['card_number'], errors='coerce')
-        df = df[~df['card_number'].isnull()]
-        df['card_number'] = df['card_number'].astype(int)
+        'JCB 15 digit', 'Maestro', 'Mastercard', 'Discover',
+        'VISA 19 digit', 'VISA 16 digit', 'VISA 13 digit'])]
+        # transform the payment date into a datetime object
+        df['date_payment_confirmed'] = pd.to_datetime(df2['date_payment_confirmed'], infer_datetime_format=True, errors = 'coerce')
+        # remove the '???' from some of the entries
+        df['card_number'] = df['card_number'].str.replace('?', '', regex = True)
 
         return df
     
