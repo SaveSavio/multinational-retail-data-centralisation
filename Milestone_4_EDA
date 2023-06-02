@@ -1,0 +1,65 @@
+/* ###################### TASK # 1 ##################################################
+The Operations team would like to know which countries we currently operate in and which country now has the most stores.
+Perform a query on the database to get the information, it should return the following information:
+
++----------+-----------------+
+| country  | total_no_stores |
++----------+-----------------+
+| GB       |             265 |
+| DE       |             141 |
+| US       |              34 |
++----------+-----------------+
+ */
+
+SELECT 
+       country_code, COUNT(country_code) AS total_no_stores
+FROM 
+    dim_store_details
+GROUP BY 
+    country_code
+ORDER BY
+    total_no_stores DESC;
+
+/* ###################### TASK # 2 ##################################################
+The business stakeholders would like to know which locations currently have the most stores.
+They would like to close some stores before opening more in other locations.
+Find out which locations have the most stores currently. The query should return the following:
+
++-------------------+-----------------+
+|     locality      | total_no_stores |
++-------------------+-----------------+
+| Chapletown        |              14 |
+| Belper            |              13 |
+| Bushley           |              12 |
+| Exeter            |              11 |
+| High Wycombe      |              10 |
+| Arbroath          |              10 |
+| Rutherglen        |              10 |
++-------------------+-----------------+
+ */
+
+SELECT 
+       locality, COUNT(locality) AS total_no_stores
+FROM 
+    dim_store_details
+GROUP BY 
+    locality
+ORDER BY
+    total_no_stores DESC
+LIMIT
+    7;
+
+/* ###################### TASK # 3 ##################################################
+Query the database to find out which months typically have the most sales your query should return the following information:
+
++-------------+-------+
+| total_sales | month |
++-------------+-------+
+|   673295.68 |     8 |
+|   668041.45 |     1 |
+|   657335.84 |    10 |
+|   650321.43 |     5 |
+|   645741.70 |     7 |
+|   645463.00 |     3 |
++-------------+-------+
+ */
