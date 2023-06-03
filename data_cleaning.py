@@ -208,7 +208,7 @@ class DataCleaning:
         df = df[df['time_period'].str.contains('|'.join(list_of_values))]
 
         # convert the time info spread across four columns into one datetime object
-        df['Datetime'] = pd.to_datetime(df[['year','month','day', 'timestamp']]
+        df['time_stamp'] = pd.to_datetime(df[['year','month','day', 'timestamp']]
                         .astype(str).apply(' '.join, 1), format='%Y %m %d %H:%M:%S')
         df.drop(['timestamp', 'month', 'year', 'day'], axis = 1, inplace = True)
 

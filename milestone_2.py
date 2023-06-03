@@ -113,6 +113,10 @@ orders_data = de.read_RDS_table(tables_list[2], RDS_engine)
 orders_data_clean = dc.clean_orders_data(orders_data)
 
 dbc.upload_to_db(orders_data_clean, 'orders_table')
+#%%
+from data_extraction import DataExtractor as de
+from data_cleaning import DataCleaning as dc
+from database_utils import DatabaseConnector as dbc
 
 url = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/date_details.json'
 date_details = de.download_date_details(url)
@@ -120,3 +124,5 @@ print('date_details_downloaded')
 date_details_clean = dc.clean_date_details(date_details)
 
 dbc.upload_to_db(date_details_clean, 'dim_date_times')
+
+# %%
