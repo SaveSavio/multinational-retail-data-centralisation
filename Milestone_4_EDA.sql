@@ -236,3 +236,40 @@ GROUP BY
     country_code
 ORDER BY
     total_staff_numbers DESC;
+
+
+/* The sales team is looking to expand their territory in Germany.
+Determine which type of store is generating the most sales in Germany.
+The query will return:
+
++--------------+-------------+--------------+
+| total_sales  | store_type  | country_code |
++--------------+-------------+--------------+
+|   198373.57  | Outlet      | DE           |
+|   247634.20  | Mall Kiosk  | DE           |
+|   384625.03  | Super Store | DE           |
+|  1109909.59  | Local       | DE           |
++--------------+-------------+--------------+
+
+ */
+
+SELECT
+        ROUND( CAST (SUM (dim_products.product_price * orders_table.product_quantity) AS NUMERIC), 2) AS total_sales,
+        dim_store_details.store_type,
+        dim_store_details.country_code
+    FROM
+        orders_table
+    LEFT JOIN
+        dim_products
+    ON
+	    orders_table.product_code = dim_products.product_code
+    LEFT JOIN
+        dim_store_details
+    ON
+        orders_table.store_code = dim_store_details.store_code
+    GROUP BY
+        store_type, country_code
+    HAVING
+        country_code = 'DE'
+    ORDER BY
+        total_sales ASC;
