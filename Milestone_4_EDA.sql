@@ -97,3 +97,77 @@ You should get the following information:
 +------------------+-------------------------+----------+
  */
 
+WITH table_1 AS
+    (
+    SELECT *,
+        CASE
+            WHEN store_type = 'Web Portal' THEN 'Online'
+            ELSE 'Offline'
+        END AS on_off_line
+    FROM
+        dim_store_details
+    )
+SELECT
+    COUNT(product_code) AS numbers_of_sales,
+    SUM(product_quantity) AS product_quantity_count,
+    on_off_line AS location
+FROM
+    orders_table
+JOIN
+    table_1
+ON
+    orders_table.store_code = table_1.store_code
+GROUP BY
+    on_off_line;
+
+/* 
+The sales team wants to know which of the different store types is generated the most revenue so they know where to focus.
+Find out the total and percentage of sales coming from each of the different store types.
+The query should return:
+
++-------------+-------------+---------------------+
+| store_type  | total_sales | percentage_total(%) |
++-------------+-------------+---------------------+
+| Local       |  3440896.52 |               44.87 |
+| Web portal  |  1726547.05 |               22.44 |
+| Super Store |  1224293.65 |               15.63 |
+| Mall Kiosk  |   698791.61 |                8.96 |
+| Outlet      |   631804.81 |                8.10 |
++-------------+-------------+---------------------+
+ */
+
+WITH table_1 AS
+    (
+    SELECT
+        SUM(dim_products.product_price * orders_table.product_quantity) AS grand_total
+    FROM
+        orders_table
+    LEFT JOIN
+        dim_products
+    ON
+	    orders_table.product_code = dim_products.product_code
+    ), table_2 AS
+    (
+    SELECT
+        SUM(dim_products.product_price * orders_table.product_quantity) AS total_sales,
+        store_type
+    FROM
+        orders_table
+    LEFT JOIN
+        dim_products
+    ON
+        orders_table.product_code = dim_products.product_code
+    LEFT JOIN
+        dim_store_details
+    ON
+        dim_store_details.store_code = orders_table.store_code
+    GROUP BY
+        store_type
+    ORDER BY
+        total_sales DESC
+    )
+    SELECT
+        store_type,
+        ROUND(CAST(total_sales AS numeric),2),
+        ROUND(CAST(total_sales/grand_total * 100 AS NUMERIC),2) as "percentage_total(%)"
+    FROM table_1, table_2;
