@@ -1,16 +1,24 @@
 """
-This file contains the commands for the Milestone 2 of the Multinational Retail Data Centralisation project (AiCore)
-I runs the main commands that
-    1) Download from various sources
-    2) Clean the data
-    3) Upload the data to a Postgresql database named sales_data
+Milestone 2 of the Multinational Retail Data Centralisation project (AiCore)
+    main.py
+It serves as the entry point of the project Milestone 2 and contains the code to initialize and coordinate
+the execution of other modules or classes.
 
-It uses three classes coded in the files
-    data_cleaning
-    data_extraction
-    database_utils
+It call methods that
+    Connect to source and download data
+    Clean the data
+    Upload the data to a Postgresql database on localhost named sales_data
+
+Those methods are contained in three classes coded in the files
+    DatabaseConnector ---> database_utils
+    DataCleaning --> data_cleaning.py
+    DataExtractor --> data_extraction.py
+    
 """
 
+"""
+User data
+"""
 # import the DatabaseConnector class for connecting and uploading data from various sources
 from database_utils import DatabaseConnector as dbc
 
@@ -31,9 +39,7 @@ tables_list = de.list_db_tables(RDS_engine)
 
 # print the list of tables
 print(tables_list)
-"""
-User data
-"""
+
 # read the data from the RDS table of users and stores in the users_data variable
 users_data = de.read_RDS_table(tables_list[1], RDS_engine)
 

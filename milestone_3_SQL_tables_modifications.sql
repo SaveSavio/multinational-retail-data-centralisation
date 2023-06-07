@@ -105,7 +105,7 @@ ALTER TABLE IF EXISTS dim_store_details
     ALTER COLUMN longitude TYPE FLOAT USING longitude::float,
     ALTER COLUMN locality TYPE VARCHAR(255),
     ALTER COLUMN store_code TYPE VARCHAR(12),
---    ALTER COLUMN staff_numbers TYPE SMALLINT USING staff_numbers::SMALLINT,
+    ALTER COLUMN staff_numbers TYPE SMALLINT USING staff_numbers::SMALLINT,
     ALTER COLUMN opening_date TYPE DATE,
     ALTER COLUMN store_type TYPE VARCHAR(255), -- not sure how to cast nullable
     ALTER COLUMN latitude TYPE FLOAT USING latitude::float,

@@ -1,48 +1,36 @@
-/* The company stakeholders want assurances that the company has been doing well recently.
-Find which months in which years have had the most sales historically.
-The query should return the following information:
+/* Sales would like the get an accurate metric for how quickly the company is making sales.
+Determine the average time taken between each sale grouped by year, the query should return the following information:
 
-+-------------+------+-------+
-| total_sales | year | month |
-+-------------+------+-------+
-|    27936.77 | 1994 |     3 |
-|    27356.14 | 2019 |     1 |
-|    27091.67 | 2009 |     8 |
-|    26679.98 | 1997 |    11 |
-|    26310.97 | 2018 |    12 |
-|    26277.72 | 2019 |     8 |
-|    26236.67 | 2017 |     9 |
-|    25798.12 | 2010 |     5 |
-|    25648.29 | 1996 |     8 |
-|    25614.54 | 2000 |     1 |
-+-------------+------+-------+
- */
+ +------+-------------------------------------------------------+
+ | year |                           actual_time_taken           |
+ +------+-------------------------------------------------------+
+ | 2013 | "hours": 2, "minutes": 17, "seconds": 12, "millise... |
+ | 1993 | "hours": 2, "minutes": 15, "seconds": 35, "millise... |
+ | 2002 | "hours": 2, "minutes": 13, "seconds": 50, "millise... | 
+ | 2022 | "hours": 2, "minutes": 13, "seconds": 6,  "millise... |
+ | 2008 | "hours": 2, "minutes": 13, "seconds": 2,  "millise... |
+ +------+-------------------------------------------------------+
 
-    SELECT
-        ROUND(CAST SUM(dim_products.product_price * orders_table.product_quantity AS NUMERIC) AS total_sales,
-        EXTRACT(YEAR FROM time_stamp) AS year,
-        EXTRACT(MONTH FROM time_stamp) AS month
+Hint: You will need the SQL command LEAD. */
+
+-- this is an explanation of the command, I won't need it all ---
+-- SELECT time_stamp, LEAD(time_stamp) OVER (ORDER BY time_stamp) AS next_timestamp,
+--        LEAD(time_stamp) OVER (ORDER BY time_stamp) - time_stamp AS elapsed_time
+-- FROM dim_date_times;
+
+SELECT
+    year,
+    AVG(elapsed_time) AS average_elapsed_time
+FROM
+    (
+    SELECT 
+        LEAD(time_stamp) OVER (ORDER BY time_stamp) - time_stamp AS elapsed_time,
+        EXTRACT(YEAR FROM time_stamp) AS year
     FROM
-        orders_table
-    LEFT JOIN
-        dim_products
-    ON
-	    orders_table.product_code = dim_products.product_code
-    LEFT JOIN
         dim_date_times
-    ON
-        orders_table.date_uuid = dim_date_times.date_uuid
+    ) AS subquery
     GROUP BY
-        year, month
+        YEAR
     ORDER BY
-        total_sales DESC
-    LIMIT 10;
-
-
-
--- SELECT EXTRACT(MONTH FROM date_column) AS month,
---        EXTRACT(YEAR FROM date_column) AS year,
---        SUM(sales_amount) AS total_sales
--- FROM your_table
--- GROUP BY EXTRACT(MONTH FROM date_column), EXTRACT(YEAR FROM date_column)
--- ORDER BY year, month;
+        average_elapsed_time DESC
+    LIMIT 5;
