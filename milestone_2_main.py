@@ -1,5 +1,4 @@
 """
-Milestone 2 of the Multinational Retail Data Centralisation project (AiCore)
     main.py
 It serves as the entry point of the project Milestone 2 and contains the code to initialize and coordinate
 the execution of other modules or classes.
@@ -15,12 +14,16 @@ Those methods are contained in three classes coded in the files
     DataExtractor --> data_extraction.py
     
 """
+# import the DatabaseConnector class for connecting and uploading data from various sources
+from database_utils import DatabaseConnector as dbc
+# import the data cleaning Class
+from data_cleaning import DataCleaning as dc
+# import the DataExtractor class
+from data_extraction import DataExtractor as de
 
 """
 User data
 """
-# import the DatabaseConnector class for connecting and uploading data from various sources
-from database_utils import DatabaseConnector as dbc
 
 # the credentials to connect the RDS AWS server are stored in this yaml file
 file_name = 'db_creds.yaml'
@@ -31,9 +34,6 @@ cred_dict = dbc.read_db_creds(file_name)
 # initialize the SQLalchemy engine
 RDS_engine = dbc.init_db_engine(cred_dict)
 
-# import the DataExtractor class
-from data_extraction import DataExtractor as de
-
 # get the list of tables in the RDS database
 tables_list = de.list_db_tables(RDS_engine)
 
@@ -43,8 +43,6 @@ print(tables_list)
 # read the data from the RDS table of users and stores in the users_data variable
 users_data = de.read_RDS_table(tables_list[1], RDS_engine)
 
-# import the data cleaning Class
-from data_cleaning import DataCleaning as dc
 
 # clean the user data via the relative method
 user_data_clean = dc.clean_user_data(users_data)
@@ -53,7 +51,7 @@ user_data_clean = dc.clean_user_data(users_data)
 dbc.upload_to_db(user_data_clean, 'dim_users')
 
 """
-card data
+Card data
 """
 # extract the card data
 pdf_link = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf'
@@ -113,16 +111,12 @@ products_df_clean_converted_units = dc.clean_product_weights(products_df_clean)
 dbc.upload_to_db(products_df_clean_converted_units, 'dim_products')
 
 """
-orders data
+Orders data
 """
 orders_data = de.read_RDS_table(tables_list[2], RDS_engine)
 orders_data_clean = dc.clean_orders_data(orders_data)
 
 dbc.upload_to_db(orders_data_clean, 'orders_table')
-#%%
-from data_extraction import DataExtractor as de
-from data_cleaning import DataCleaning as dc
-from database_utils import DatabaseConnector as dbc
 
 url = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/date_details.json'
 date_details = de.download_date_details(url)
@@ -130,5 +124,3 @@ print('date_details_downloaded')
 date_details_clean = dc.clean_date_details(date_details)
 
 dbc.upload_to_db(date_details_clean, 'dim_date_times')
-
-# %%
