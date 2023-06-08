@@ -1,16 +1,49 @@
-# Multinational Retail Data Centralisation
+# Multinational Retail Data Centralisation project
+
+This repository contains the relevant code and information to complete the project. The project is assigned as part of the AiCore career development programme.
+
 Scenario:<br>
+
 You work for a multinational company that sells various goods across the globe. Currently, their sales data is spread across many different data sources making it not easily accessible or analysable by current members of the team. In an effort to become more data-driven, your organisation would like to make its sales data accessible from one centralised location. Your first goal will be to produce a system that stores the current company data in a database so that it's accessed from one centralised location and acts as a single source of truth for sales data. You will then query the database to get up-to-date metrics for the business.
 
-## Milestone 1: GitHub
+To achieve the project completion, it is necessary to complete a set of tasks, which are grouped into four Milestones:
+- Environment setup
+- Data Extraction and Cleaning
+- Database Creation
+- Exploratory data analysis
 
-- To create the GitHub repo that will store the code.
+## Installation
+
+Using pip package installer (https://pypi.org/project/pip/):
+
+```python
+pip install pandas
+pip install numpy
+pip install tabula-py
+pip install requests
+pip install boto3
+pip install sqlalchemy
+pip install psycopg2
+pip install pyyaml
+```
+## Milestone 1: environment setup
+
+It is necessary to create a postgreSQL database named **sales_data** with the following characteristics:
+
+    DATABASE_TYPE = 'postgresql'
+    HOST = 'localhost'
+    USER = 'postgres'
+    DATABASE = 'sales_data'
+    PORT = 5432
 
 ## Milestone 2: Data Extraction
 
-The data comes from a variety of sources. It needs to be extracted, cleaned and stored in preparation for its storage on a PostgreSQL database.
+The data comes from a variety of sources:
+- 
+- 
+- 
+It needs to be extracted, cleaned and stored in preparation for its storage on a PostgreSQL database.
 
-- The SQL database is named **sales_data**. It's been created with PGAdmin and stored on a localhost.
 
 - Three classes provide the methods needed to
     - Connect to source and download data
@@ -62,6 +95,7 @@ class DatabaseConnector:
         """
         
 ```python
+
 class DataCleaning:
     """
     Defines methods to clean data the user data from various datasources.
