@@ -91,7 +91,7 @@ The tables in the schema are:
 - card details: stored in a PDF document in an AWS S3 bucket  --> **dim_card_details**
 - The store data are stored as json files at several https urls and require the use of an API --> **dim_store_data**
 - the product details are stored on a S3 server --> **dim_products**
-- the orders are stored on a AWS RDS server --> **dim_order**
+- the orders are stored on a AWS RDS server --> **orders_data**
 
 ## Milestone 3: Create the Database Schema
 It is necessary to create the correct connections, through a set of primary and secondary keys, thus creating a *schema*
