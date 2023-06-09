@@ -133,5 +133,5 @@ It is now possible to perform any desired data analysis on the data. In this cas
 1. Which German store is selling the most?
 1.  How quickly is the company making sales?
 
-The code that answers the above questions is contained in the file milestone_4_data_analysis.sql
+The code that answers the above questions is contained in the file **milestone_4_data_analysis.sql**
 
