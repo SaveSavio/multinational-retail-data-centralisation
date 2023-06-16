@@ -1,3 +1,6 @@
+import pandas as pd
+import datetime
+import numpy as np
 
 class DataCleaning:
     """
@@ -14,8 +17,6 @@ class DataCleaning:
                 The same dataframe, but cleaned.
 
         """
-        import pandas as pd
-        import datetime
 
         # drop the index columns, it is redundant
         df = df.drop(['index'], axis = 1)
@@ -51,8 +52,6 @@ class DataCleaning:
             Returns: a pandas dataframe
 
         """
-        import pandas as pd
-        import datetime
 
         # remove some NULL entries
         df = df[df['card_number']!='NULL']
@@ -77,7 +76,6 @@ class DataCleaning:
             Returns: a pandas dataframe
         """
         # drop specific rows with NaN
-        import pandas as pd
         df = df[~df['country_code'].isna()]
 
         list_of_values = ['GB', 'US', 'DE']
@@ -107,8 +105,6 @@ class DataCleaning:
             Returns:
                 the same database clean from existing errors
         """
-        import pandas as pd
-        import numpy as np
 
         dfc = df.copy()    
         # remove rows with all null entries
@@ -146,9 +142,6 @@ class DataCleaning:
                 the same database clean from existing errors
 
         """
-        import pandas as pd
-        # create an empty column that will contain the weight in kg
-        import numpy as np
         # create an empty column that will contain the weight in kg
         dfcc = dfc.copy()
         # process the items such as "12 x 100g" by splitting those into a dfc with two colums, the index[0] containing the number of items
