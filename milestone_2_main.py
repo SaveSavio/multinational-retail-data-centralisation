@@ -46,9 +46,12 @@ users_data = de.read_RDS_table(tables_list[1], RDS_engine)
 
 # clean the user data via the relative method
 user_data_clean = dc.clean_user_data(users_data)
- 
+
+file_name_psql = 'db_creds.yaml'
+cred_dict = dbc.read_db_creds(file_name_psql)
+
 # upload the user data to the SQL server
-dbc.upload_to_db(user_data_clean, 'dim_users')
+dbc.upload_to_db(user_data_clean, 'dim_users', cred_dict_psql)
 
 """
 Card data
