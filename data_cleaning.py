@@ -20,21 +20,17 @@ class DataCleaning:
 
         # drop the index columns, it is redundant
         df = df.drop(['index'], axis = 1)
-        
         # drop the rows containing NaNs
         df = df[df.notna().any(axis=1)]
-
         # transform the DOE from string to a datetime object. The errors option will
         # set a NaT for every date that cannot be interpreted 
         df['date_of_birth'] = pd.to_datetime(df['date_of_birth'], infer_datetime_format=True, errors = 'coerce')
         # this statement allows to get rid of the rows with incorrect dates
         df = df[df['date_of_birth'].notna()]
-
         # let's do the same for join_date
         df['join_date'] = pd.to_datetime(df['join_date'], infer_datetime_format=True, errors = 'coerce')
         # this statement allows to get rid of the rows with incorrect dates
         df = df[df['join_date'].notna()]
-
         # sort out some wrong country code entries for UK
         df.loc[(df['country'] == "United Kingdom") & (df['country_code'] != "GB"), 'country_code'] = 'GB'
         # remove some wrong entries
@@ -75,22 +71,23 @@ class DataCleaning:
 
             Returns: a pandas dataframe
         """
+
         # drop specific rows with NaN
         df = df[~df['country_code'].isna()]
-
         list_of_values = ['GB', 'US', 'DE']
+        # drop rows with wrong country codes
         df = df[df['country_code'].str.contains('|'.join(list_of_values))]
-
+        # drop a duplicated and a useless column
         df.drop(columns = ['lat', 'index'], inplace = True)
+        # convert the latitude column to float and remove negative values
         df['latitude'] = df['latitude'].astype(float).abs()
-
-        import datetime
+        # convert dates to datetime object
         df['opening_date'] = pd.to_datetime(df['opening_date'], infer_datetime_format=True, errors = 'coerce')
+        # convert staff numbers to numeric
         staff_mask = df['staff_numbers'].apply(pd.to_numeric, errors='coerce').isnull()
-
-        import numpy as np
+        # calculated average staff
         mean_staff = df['staff_numbers'][staff_mask == False].astype(int).mean()
-
+        # imputation for missing staff numbers:
         df.loc[staff_mask == True, 'staff_numbers'] = mean_staff
 
         return df
@@ -106,28 +103,22 @@ class DataCleaning:
                 the same database clean from existing errors
         """
 
-        dfc = df.copy()    
         # remove rows with all null entries
         df = df[df['product_name'].notnull()]
         # create a column that contains the units of the weight column
-        dfc = df.copy()
-        dfc['units'] = df['weight'].str.replace('\d+', '', regex=True).str.replace('.', '', regex=True)
+        df['units'] = df['weight'].str.replace('\d+', '', regex=True).str.replace('.', '', regex=True)
         # analysis the 'units' column, create a list of values that make no sense
         list_of_values = ['GONZJTL', 'ZZTDGUZVU', 'MXRYSHX']
         # remove the rows which 'units' column contains any item in the list_of_values
-        dfc = dfc[~dfc['units'].str.contains('|'.join(list_of_values))]
-
+        df = df[~df['units'].str.contains('|'.join(list_of_values))]
         # clean the price column from the £ sign
-        dfc['product_price'] = dfc['product_price'].str.replace('£', '').astype(float)
-
+        df['product_price'] = df['product_price'].str.replace('£', '').astype(float)
         # clean the date column and transform it into a datetime object
-        import datetime
-        dfc['date_added'] = pd.to_datetime(df['date_added'], infer_datetime_format=True, errors = 'coerce')
-
+        df['date_added'] = pd.to_datetime(df['date_added'], infer_datetime_format=True, errors = 'coerce')
         # sort the mispelled entries in the 'removed' column
-        dfc['removed'] = df['removed'].str.replace('Still_avaliable', 'Still_available')
+        df['removed'] = df['removed'].str.replace('Still_avaliable', 'Still_available')
 
-        return dfc
+        return df
     
     def clean_product_weights(dfc):
         """
@@ -180,6 +171,7 @@ class DataCleaning:
             Results:
                 A pandas dataframe
         """
+
         df.drop(['first_name', 'last_name', '1', 'level_0'], axis = 1, inplace = True)
         return df
 
@@ -193,7 +185,6 @@ class DataCleaning:
         """
         print('cleaning date details')
 
-        import pandas as pd
         # removes NaN
         df = df[~df['time_period'].isnull()]
         # removes other erroneous values
