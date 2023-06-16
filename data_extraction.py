@@ -72,7 +72,7 @@ class DataExtractor:
             Returns:
                 the number of stores to be extracted later
         """
-        results = requests.get(url, headers = key)
+        results = requests.get(url, headers=key)
         return results.json()['number_stores']
     
     def retrieve_stores_data(base_url, number_stores, key):
@@ -90,7 +90,7 @@ class DataExtractor:
 
         for index in range(number_stores):
             url = base_url + str(index)
-            store = requests.get(url, headers = key)
+            store = requests.get(url, headers=key)
             tmp = pd.json_normalize(store.json())
             df = pd.concat([df, tmp], ignore_index=True)
             print(index+1)
