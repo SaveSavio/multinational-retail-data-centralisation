@@ -135,6 +135,11 @@ class DataCleaning:
         """
         # create an empty column that will contain the weight in kg
         dfcc = dfc.copy()
+        
+        # TO DO: this section has a line which is far too long. I should do the following:
+        # 1) transform the line in a meaningful string by removing spaces and units
+        # 2) evaluate the expression
+
         # process the items such as "12 x 100g" by splitting those into a dfc with two colums, the index[0] containing the number of items
         # ("12") and the index[1] the weight of each item (100g). The weight is then cleaned from the unit.
         # the two are multiplied and then converted to kg

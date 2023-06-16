@@ -1,3 +1,12 @@
+from sqlalchemy import inspect
+import pandas as pd
+import tabula
+import pandas as pd
+import requests
+import re
+import boto3
+
+
 class DataExtractor:
     """
     Defines methods that help extract data from different data sources such as
@@ -14,7 +23,7 @@ class DataExtractor:
             Returns:
                 A list all the tables in the database
         """
-        from sqlalchemy import inspect
+
         inspector = inspect(engine)
         table_names = inspector.get_table_names()
         return table_names
@@ -30,7 +39,7 @@ class DataExtractor:
             Returns:
                 a Pandas dataframe containing the information of the input table
         """
-        import pandas as pd
+
         df = pd.read_sql_table(table_name, engine)
         return df
     
@@ -44,8 +53,7 @@ class DataExtractor:
             Returns:
                 a pandas DataFrame containing the data in the pdf
         """
-        import tabula
-        import pandas as pd
+
         dfs = tabula.read_pdf(https_link, pages='all')
         # the pdf file has 1 header for each page so tabula returns 1 list per each page
         # it is therefore necessary to concatenate all the pages in one table
@@ -64,7 +72,6 @@ class DataExtractor:
             Returns:
                 the number of stores to be extracted later
         """
-        import requests
         results = requests.get(url, headers = key)
         return results.json()['number_stores']
     
@@ -78,9 +85,6 @@ class DataExtractor:
             Returns:
                 A pandas dataframe containing all stores information
         """
-       
-        import pandas as pd
-        import requests
         
         df = pd.DataFrame()
 
@@ -107,16 +111,14 @@ class DataExtractor:
 
         """
         # extract the datalake Bucket from the address line
-        import re
+
         start = 's3://'
         end = '/'
         bucket = re.search('%s(.*)%s' % (start, end), s3_url).group(1)
         # use boto3 client to manage the communication with the s3
-        import boto3
         s3_client = boto3.resource('s3')
         s3_client.Bucket(bucket).download_file(Key=filename, Filename=filename)
 
-        import pandas as pd
         return pd.read_csv(filename)
     
     def download_date_details(url):
@@ -128,8 +130,6 @@ class DataExtractor:
             Returns: a pandas dataframe
 
         """
-        import requests
-        import pandas as pd
 
         solditems = requests.get(url) # (your url)
         data = solditems.json()
