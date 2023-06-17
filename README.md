@@ -122,7 +122,7 @@ This creates a star-based database schema. The commands are documented in
 - milestone_3_SQL_tables_modifications.sql <br>
 
 ## Milestone 4: Data Analysis
-It is now possible to perform any desired data analysis on the data. In this case, the is performed in postgreSQL.<br> These are the questions answered:
+It is now possible to perform any desired data analysis on the data. In this case, we use postgreSQLto answer the following questions:
 1. How many stores does the busness have and in which countries?
 1. Which locations currently have the most stores?
 1. Which months produce the average highest cost of sales typically?
@@ -133,5 +133,5 @@ It is now possible to perform any desired data analysis on the data. In this cas
 1. Which German store is selling the most?
 1.  How quickly is the company making sales?
 
-The code that answers the above questions is contained in the file **milestone_4_data_analysis.sql**
+The code answering the above questions is contained in the file **milestone_4_data_analysis.sql**
 
