@@ -82,7 +82,7 @@ class DataExtractor:
 ```
 
 The sequence of actions that lead to the creation of the company central database is coded in the
-main.py file called *milestone_2_main.py*.
+main.ipynb file called *milestone_2_main.ipynb*.
 
 Finally, the cleaned data tables are updloaded to the dabaset through the **upload_to_db** method.
 
